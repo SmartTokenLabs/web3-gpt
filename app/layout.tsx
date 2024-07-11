@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { JetBrains_Mono as FontMono, Inter as FontSans } from "next/font/google"
+import localFont from "next/font/local"
 
 import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "@/components/ui/sonner"
@@ -11,15 +11,39 @@ import { Web3Provider } from "@/components/providers/web3-provider"
 import { cn } from "@/lib/utils"
 import { APP_URL } from "@/app/config"
 
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans"
-})
-
-const fontMono = FontMono({
-  subsets: ["latin"],
+// Self-hosted JetBrains Mono
+const FontMono = localFont({
+  src: [
+    {
+      path: '/fonts/JetBrainsMono-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '/fonts/JetBrainsMono-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: "--font-mono"
-})
+});
+
+// Self-hosted Inter
+const FontSans = localFont({
+  src: [
+    {
+      path: '/fonts/Inter-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '/fonts/Inter-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: "--font-sans"
+});
 
 export const runtime = "edge"
 
@@ -51,7 +75,7 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("font-sans antialiased", fontSans.variable, fontMono.variable)}>
+      <body className={cn("font-sans antialiased", FontSans.variable, FontMono.variable)}>
         <Providers attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen flex-col">
             <main className="flex flex-1 flex-col bg-muted/50">
