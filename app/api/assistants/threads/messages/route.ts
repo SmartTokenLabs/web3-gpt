@@ -10,6 +10,8 @@ import { createAgent } from "@/lib/actions/ai"
 import type { DbChat } from "@/lib/types"
 import { storeChat } from "@/lib/actions/db"
 import type { BadRequestError } from "openai/error.mjs"
+import { resolveAddress, resolveDomain } from "@/lib/actions/tools"
+// import sendEther from "@/lib/functions/send-ether"
 
 export const runtime = "nodejs"
 
@@ -52,6 +54,7 @@ export async function POST(request: NextRequest) {
       throw error
     })
 
+  // if threadId is not provided, store as new chat
   if (!threadIdFromClient && userId) {
     const title = message.slice(0, 50)
     const newChat: DbChat = {
@@ -71,7 +74,8 @@ export async function POST(request: NextRequest) {
   return AssistantResponse({ threadId, messageId }, async ({ forwardStream, sendDataMessage }) => {
     const runStream = openai.beta.threads.runs.stream(threadId, {
       assistant_id: assistantId,
-      stream: true
+      stream: true,
+      model: "gpt-3.5-turbo"
     })
 
     // forward run status would stream message deltas
@@ -141,6 +145,62 @@ export async function POST(request: NextRequest) {
               return {
                 output: `Agent created: successfully, agent chat url: ${agentChatUrl}`,
                 tool_call_id: toolCall.id
+              }
+            }
+            // case "send_ether": {
+            //   const { chainId, to, amount } = parameters
+            //   try {
+            //     const sendEtherResult = await sendEther({
+            //       chainId,
+            //       to,
+            //       amount
+            //     })
+
+            //     return {
+            //       output: `Sent ${amount} to ${to} txHash: ${sendEtherResult.txHash} explorerUrl: ${sendEtherResult.explorerUrl}`,
+            //       tool_call_id: toolCall.id
+            //     }
+            //   } catch (error) {
+            //     const err = error as Error
+            //     console.error(`Error in sendEther tool: ${err.message}`)
+            //     return {
+            //       output: JSON.stringify({ error: `Error in sendEther tool: ${err.message}` }),
+            //       tool_call_id: toolCall.id
+            //     }
+            //   }
+            // }
+            case "resolveDomain": {
+              const { domain, ticker = "ETH" } = parameters
+              try {
+                const address = await resolveDomain(domain, ticker)
+                return {
+                  output: `Resolved address for domain ${domain}: ${address}`,
+                  tool_call_id: toolCall.id
+                }
+              } catch (error) {
+                const err = error as Error
+                console.error(`Error in resolveDomain tool: ${err.message}`)
+                return {
+                  output: JSON.stringify({ error: `Error in resolveDomain tool: ${err.message}` }),
+                  tool_call_id: toolCall.id
+                }
+              }
+            }
+            case "resolveAddress": {
+              const { address } = parameters
+              try {
+                const domain = await resolveAddress(address)
+                return {
+                  output: `Resolved domain for address ${address}: ${domain}`,
+                  tool_call_id: toolCall.id
+                }
+              } catch (error) {
+                const err = error as Error
+                console.error(`Error in resolveAddress tool: ${err.message}`)
+                return {
+                  output: JSON.stringify({ error: `Error in resolveAddress tool: ${err.message}` }),
+                  tool_call_id: toolCall.id
+                }
               }
             }
 
