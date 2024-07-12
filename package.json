@@ -11,6 +11,8 @@
     "format:write": "bun biome format --write {app,lib,components}"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.36",
+    "@nanostores/react": "github:ai/react",
     "@radix-ui/react-alert-dialog": "1.0.4",
     "@radix-ui/react-dialog": "1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -26,7 +28,7 @@
     "@vercel/analytics": "^1.2.2",
     "@vercel/kv": "^1.0.1",
     "@vercel/og": "^0.6.2",
-    "ai": "^3.1.2",
+    "ai": "^3.2.22",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "nanoid": "^4.0.2",
@@ -46,8 +48,8 @@
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
     "solc": "^0.8.26",
-    "vercel": "^34.1.9",
     "sonner": "^1.4.41",
+    "vercel": "^34.1.9",
     "viem": "^2.10.9",
     "wagmi": "^2.9.1",
     "zustand": "^4.4.7"

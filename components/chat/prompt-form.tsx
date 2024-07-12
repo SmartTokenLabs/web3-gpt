@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 
-import type { UseAssistantHelpers } from "ai/react"
+//import type { UseAssistantHelpers } from "ai/react"
+import type { UseAssistantHelpers } from "@ai-sdk/react"
 import Textarea from "react-textarea-autosize"
 
 import { Button, buttonVariants } from "@/components/ui/button"

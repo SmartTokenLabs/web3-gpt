@@ -1,4 +1,5 @@
-import type { UseAssistantHelpers } from "ai/react"
+//import type { UseAssistantHelpers } from "ai/react"
+import type { UseAssistantHelpers } from "@ai-sdk/react"
 
 import { ButtonScrollToBottom } from "@/components/chat/button-scroll-to-bottom"
 import { PromptForm } from "@/components/chat/prompt-form"
