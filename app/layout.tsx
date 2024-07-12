@@ -45,7 +45,7 @@ const FontSans = localFont({
   variable: "--font-sans"
 });
 
-export const runtime = "edge"
+//export const runtime = "edge"
 
 export const metadata: Metadata = {
   title: {
